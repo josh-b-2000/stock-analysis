@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "Stock Analysis"
+version = "0.1.0"
+description = "Generate buying recommendations for the stock market."
+authors = ["josh-b-2000 <joshua@autone.io>"]
+packages = [{ include = "stock_analysis" }]
+
+[tool.poetry.dependencies]
+python = "~3.12"
+
+pydantic = "2.11.4"
+pydantic-settings = "2.9.1"
+typer = "0.15.4"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "1.15.0"
+ruff = "0.11.8"
+
+[tool.poetry.scripts]
+cli = "stock_analysis.cli:cli"
+
+[tool.mypy]
+disallow_untyped_defs = true
+disable_error_code = ["import-untyped"]
+plugins = "pydantic.mypy"
+
+[tool.ruff.lint]
+select = [
+    "ERA",  # eradicate
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "ISC",  # flake8-implicit-str-concat
+    "PIE",  # flake8-pie
+    "T20",  # flake8-print
+    "SIM",  # flake8-simplify
+    "I",    # isort
+    "PERF", # perflint
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "PGH",  # pygrep-hooks
+    "UP",   # pyupgrade
+    "RUF",  # Ruff-specific rules
+]
+ignore = [
+    "E501",   # (line too long) handled by ruff formatter
+    "SIM114", # (combine if branches) a lot of times it's more readable to separate logic
+    "ISC001", # (implicit string concat) conflicts with ruff formatter
+]
