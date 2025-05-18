@@ -1,11 +1,24 @@
+import logging
+
 import typer
 
+from stock_analysis.alphavantage_api.utils import is_valid_stock_symbol
+from stock_analysis.extract.main import main as extract_main
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s (%(asctime)s): %(message)s",
+    datefmt="%H:%M:%S",
+)
 app = typer.Typer()
 
 
 @app.command()
-def extract() -> None:
-    raise NotImplementedError()
+def extract(stock_symbol: str) -> None:
+    if not is_valid_stock_symbol(stock_symbol):
+        raise ValueError(f"Invalid stock symbol '{stock_symbol}'")
+
+    extract_main(stock_symbol)
 
 
 @app.command()
