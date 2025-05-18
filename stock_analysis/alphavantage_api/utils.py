@@ -1,6 +1,6 @@
 import datetime as dt
 import logging
-from typing import TypeGuard, get_args
+from typing import TypeGuard, cast, get_args
 from urllib.parse import urlencode
 
 import requests
@@ -15,14 +15,26 @@ from stock_analysis.config import Settings
 settings = Settings()
 logger = logging.getLogger()
 
+CACHE_FILE_KEY_DELIMITER = "__"
+
 
 def is_valid_stock_symbol(maybe_symbol: str) -> TypeGuard[StockSymbol]:
     return maybe_symbol in get_args(StockSymbol)
 
 
 def get_cache_file_key(symbol: StockSymbol, function: AlphaVantageFunction) -> str:
-    today = dt.date.today().strftime("%d_%m_%Y")
-    return "__".join([symbol, function, today]) + ".csv"
+    today = dt.date.today().strftime("%Y_%m")
+    return CACHE_FILE_KEY_DELIMITER.join([symbol, function, today]) + ".csv"
+
+
+def parse_cache_file_key(key: str) -> tuple[StockSymbol, AlphaVantageFunction, dt.date]:
+    symbol, function, date_cached = key.split(CACHE_FILE_KEY_DELIMITER)
+    year, month = [int(value) for value in date_cached.split("_")]
+    return (
+        cast(StockSymbol, symbol),
+        cast(AlphaVantageFunction, function),
+        dt.date(year, month, day=1),
+    )
 
 
 def get_alphavantage_data(request: AlphaVantageRequest) -> AlphaVantageResponse:
