@@ -3,6 +3,7 @@ import logging
 import typer
 
 from stock_analysis.alphavantage_api.utils import is_valid_stock_symbol
+from stock_analysis.compare.main import main as compare_main
 from stock_analysis.extract.main import main as extract_main
 
 logging.basicConfig(
@@ -19,6 +20,11 @@ def extract(stock_symbol: str) -> None:
         raise ValueError(f"Invalid stock symbol '{stock_symbol}'")
 
     extract_main(stock_symbol)
+
+
+@app.command()
+def compare() -> None:
+    compare_main()
 
 
 @app.command()

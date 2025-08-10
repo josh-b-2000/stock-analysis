@@ -8,5 +8,13 @@ STOCK_SYMBOL_TO_NAME: dict[StockSymbol, str] = {
 }
 
 
+STOCK_SYMBOL_TO_COLOR: dict[StockSymbol, str] = {
+    "IBM": "black",
+    "DIS": "blue",
+    "CMCSA": "green",
+    "GME": "red",
+}
+
+
 def get_stock_name(symbol: StockSymbol) -> str:
     return STOCK_SYMBOL_TO_NAME[symbol]
